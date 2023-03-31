@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Welcome to the homepage</h1>
+    <h1>Welcome to my app</h1>
     <AppAlert>
-      This is an auto-imported component
-      <button>
-        <NuxtLink to="/admin"></NuxtLink>
-      </button>
+      This is home page, click here to go to admin page
+      
+      <NuxtLink to="/admin">Go to admin page</NuxtLink>
+      
       
     </AppAlert>
   </div>

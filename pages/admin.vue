@@ -2,15 +2,15 @@
   <div class="function-button">
     <!-- BUTTON FUNCTION -->
     <button @click="saveClick">Save</button>
-    <button>Undo</button>
-    <button>Redo</button>
+    <button @click="undoClick">Undo</button>
+    <button @click="redoClick">Redo</button>
 
     <!-- EXPORT -->
     <a :href="downLink" download="data.txt">
       <button @click="exportToTxt(element)">Export</button>
     </a>
     <!-- ------ -->
-    
+
     <!-- IMPORT FUNCTION -->
     <label for="file-upload" class="custom-file-upload">
      Import
@@ -97,13 +97,19 @@
       const element = ref([]);
       const buttonElement = ref<[]>([]);
       const paraElement = ref<[]>([]);
-
+      const undo = [];
+      const redo = [];
       //CHOSEN COMPONENT TO SETTING
       const elSetting = ref({
         type: '',
         id: -1,
       });
-      
+      function resetElSetting(){
+        elSetting.value = {
+          type: '',
+          id: -1,
+        }
+      }
       //RETURN NUMBER OF INSTANCES
       const elNum = computed(()=>{
         return element.value.length;
@@ -130,6 +136,14 @@
             alert: '',
           }
         })
+        undo.push({
+          type: 'button',
+          prop: {
+            text: '',
+            alert: '',
+          }
+        })
+        redo.length = 0;
       }
 
       //ADDING NEW PARAGRAPH TO THE VIEW
@@ -140,13 +154,19 @@
             text: '',
           }
         })
+        undo.push({
+          type: 'para',
+          prop:{
+            text: '',
+          }
+        })
+        redo.length = 0;
       }
 
       //DETECT WHEN BUTTON DRAG RELEASE
       function bmouseRelease(){
         eButton.value.style.transform = null
         if(mouseX.value > content.value.offsetLeft && mouseY.value > content.value.offsetTop){
-          console.log('add button');
           addButton();
         }
       }
@@ -155,14 +175,12 @@
       function pmouseRelease(){
         ePara.value.style.transform = null;
         if(mouseX.value > content.value.offsetLeft && mouseY.value > content.value.offsetTop){
-          console.log('add para');
           addPara();
         }
       }
       
       //WHEN BUTTON ELEMENT IS CLICKED
       function eButtonClick(e){
-        console.log('button', e.target.id);
         let id = e.target.id
         elSetting.value = {
           type: 'button',
@@ -173,7 +191,6 @@
       //WHEN PARA IN VIEW IS CLICKED
       function eParaClick(e){
         let id = e.target.id
-        console.log('para',e.target.id);
         elSetting.value = {
           type: 'para',
           id: id,
@@ -193,6 +210,31 @@
         downLink.value = window.URL.createObjectURL(blob)
       }
 
+      //UNDO POP ONE ELEMENT
+      function undoClick(){
+        if(undo.length != 0){
+          //reset avoid bug
+          resetElSetting();
+          let popEl = element.value.pop();
+          console.log(popEl);
+          undo.pop();
+          redo.push(popEl);
+        }else{
+          
+        }
+      }
+
+      function redoClick(){
+        if(redo.length != 0){
+          //reset avoid bug
+          resetElSetting();
+          let popEl= redo.pop();
+          element.value.push(popEl);
+          undo.push(popEl);
+        }else{
+          
+        }
+      }
       onMounted(()=>{
         //MOVE MOUSE
         document.addEventListener('mousemove',(event)=>{
@@ -231,10 +273,11 @@
             console.log(fr.result);
             element.value = JSON.parse(fr.result);
           }
-        
-          //TODO LOAD PAST DATA IN LOCAL STORAGE
-
         })
+        //TODO LOAD PAST DATA IN LOCAL STORAGE
+        const myData = JSON.parse(localStorage.getItem('element'));
+        element.value = myData._value
+        console.log('mouted');
       })
       return{
         mouseX,
@@ -254,6 +297,8 @@
         exportToTxt,
         downLink,
         input,
+        undoClick,
+        redoClick,
       }
     }
   })
@@ -336,3 +381,6 @@ input[type="file"] {
     cursor: pointer;
 }
 </style>
+
+
+

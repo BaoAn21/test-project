@@ -4,7 +4,7 @@
     <AppAlert>
       This is an auto-imported component
       <button>
-        <NuxtLink to="/home"></NuxtLink>
+        <NuxtLink to="/admin"></NuxtLink>
       </button>
       
     </AppAlert>

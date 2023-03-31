@@ -6,11 +6,8 @@
 </template>
 
 <script>
-import { useDataElement } from '~~/composables/useDataElement';
-import { storeToRefs } from 'pinia';
 export default ({
   setup(prop){
-    // const element = reactive(useDataElement())
     const element = ref();
 
     function eButtonClick(e){
@@ -18,9 +15,7 @@ export default ({
       alert(element.value[id].prop.alert)
     }
     onMounted(()=>{
-      // console.log(element.getEl.value);
-      // const data = saveData();
-      // console.log(data.data);
+      // LOADING DATA FROM LOCAL STORAGE
       const myData = JSON.parse(localStorage.getItem('element'));
       element.value = myData._value
       console.log(element.value); 

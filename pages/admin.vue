@@ -1,24 +1,28 @@
 <template>
   <div class="function-button">
+    <!-- BUTTON FUNCTION -->
     <button @click="saveClick">Save</button>
     <button>Undo</button>
     <button>Redo</button>
+
+    <!-- EXPORT -->
     <a :href="downLink" download="data.txt">
       <button @click="exportToTxt(element)">Export</button>
     </a>
+    <!-- ------ -->
     
-    
+    <!-- IMPORT FUNCTION -->
     <label for="file-upload" class="custom-file-upload">
      Import
     </label>
     <input id="file-upload" type="file" ref="input"/>
-  
+    <!-- --------------- -->
 
-    <!-- <button>Import</button> -->
+    <!-- VIEW -->
     <a href="/customer" target="_blank">
       <button>View</button>
     </a>
-    
+    <!-- --- -->
   </div>
 
   <div class="main">
@@ -45,6 +49,7 @@
           <p>Mouse: {{ `(${mouseX},${mouseY})` }}</p>
           <p>Dragging {{ `${draggEl ? draggEl: ''}` }}</p>
           <p>Instances {{ `${elNum? elNum: ''}` }}</p>
+          <!-- Config , check for id different than -1 -->
           <p>Config {{ elSetting.id == -1 ? null: JSON.stringify({
               id:elSetting.id,
               ...element[elSetting.id]
@@ -92,22 +97,19 @@
       const element = ref([]);
       const buttonElement = ref<[]>([]);
       const paraElement = ref<[]>([]);
+
+      //CHOSEN COMPONENT TO SETTING
       const elSetting = ref({
         type: '',
         id: -1,
       });
-      // function onDragStart(e){
-      //   if(dragging){
-      //     console.log(e.srcElement.style.top);
-      //     console.log(e);
-      //     e.srcElement.style.transform = `translate(${mouseX.value - e.srcElement.offsetLeft}px, ${mouseY.value - e.srcElement.offsetTop}px)`;
-      //     console.log(mouseX.value - e.srcElement.offsetLeft);
-      //   }
-      // }
       
+      //RETURN NUMBER OF INSTANCES
       const elNum = computed(()=>{
         return element.value.length;
       })
+
+      //ON MOUSEMOVE FUNCTION
       function onMousemove(e){
         mouseX.value = e.clientX;
         mouseY.value = e.clientY;
@@ -118,6 +120,8 @@
           ePara.value.style.transform = `translate(${mouseX.value - ePara.value.offsetLeft}px, ${mouseY.value - ePara.value.offsetTop}px)`;
         }
       }
+
+      //ADDING NEW BUTTON TO THE VIEW
       function addButton(){
         element.value.push({
           type: 'button',
@@ -127,6 +131,8 @@
           }
         })
       }
+
+      //ADDING NEW PARAGRAPH TO THE VIEW
       function addPara(){
         element.value.push({
           type: 'para',
@@ -135,6 +141,8 @@
           }
         })
       }
+
+      //DETECT WHEN BUTTON DRAG RELEASE
       function bmouseRelease(){
         eButton.value.style.transform = null
         if(mouseX.value > content.value.offsetLeft && mouseY.value > content.value.offsetTop){
@@ -142,6 +150,8 @@
           addButton();
         }
       }
+
+      //DETECT WHEN PARA DRAG RELEASE
       function pmouseRelease(){
         ePara.value.style.transform = null;
         if(mouseX.value > content.value.offsetLeft && mouseY.value > content.value.offsetTop){
@@ -150,66 +160,51 @@
         }
       }
       
+      //WHEN BUTTON ELEMENT IS CLICKED
       function eButtonClick(e){
         console.log('button', e.target.id);
         let id = e.target.id
-        // element.value[id].prop.text = "haha"
         elSetting.value = {
           type: 'button',
-          // prop: {
-          //   text: element.value[id].prop.text,
-          //   alert: element.value[id].prop.alert,
-          // },
           id: id,
         }
       }
+
+      //WHEN PARA IN VIEW IS CLICKED
       function eParaClick(e){
         let id = e.target.id
         console.log('para',e.target.id);
-        // element.value[id].prop.text = "haha";
         elSetting.value = {
           type: 'para',
-          // prop: {
-          //   text: element.value[id].prop.text
-          // },
           id: id,
         }
       }
-      function viewClick(){
-        // const state = useDataElement();
-        // // elData.value = element.value;
-        // state.setEl(element.value)
-        // console.log(state.getEl.value);
-        // const data = saveData();
-        // data.data = element;
-        localStorage.setItem('element', JSON.stringify(element))
-      }
-
+      
+      //SAVE BUTTON CLICKED, SAVE DATA TO LOCAL STORAGE
       function saveClick(){
         localStorage.setItem('element', JSON.stringify(element))
       }
 
+      //EXPORT/ DOWNLOAD FUNCTION
       const downLink = ref();
       function exportToTxt(data) {
         const text = JSON.stringify(data);
         const blob = new Blob([text], { type: 'text/plain' });
-        // const link = document.createElement('a');
-        // link.href = window.URL.createObjectURL(blob);
         downLink.value = window.URL.createObjectURL(blob)
-        // link.download = 'data.txt';
-        // link.click();
       }
 
       onMounted(()=>{
-        console.dir(content.value);
+        //MOVE MOUSE
         document.addEventListener('mousemove',(event)=>{
           onMousemove(event);
         })
 
+        //BUTTON DRAG
         eButton.value.addEventListener('mousedown',(e)=>{
           bdragging = true;
           draggEl.value = e.srcElement.id
         })
+        //PARA DRAG
         ePara.value.addEventListener('mousedown',(e)=>{
           pdragging = true;
           draggEl.value = e.srcElement.id
@@ -236,6 +231,8 @@
             console.log(fr.result);
             element.value = JSON.parse(fr.result);
           }
+        
+          //TODO LOAD PAST DATA IN LOCAL STORAGE
 
         })
       })
@@ -253,7 +250,6 @@
         eParaClick,
         elNum,
         elSetting,
-        viewClick,
         saveClick,
         exportToTxt,
         downLink,

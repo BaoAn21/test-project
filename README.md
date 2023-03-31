@@ -1,42 +1,34 @@
-# Nuxt 3 Minimal Starter
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+# I-ON Coding Test
 
-## Setup
+This is my github project for I-ON coding test
 
-Make sure to install the dependencies:
 
-```bash
-# yarn
-yarn install
+## Tech Stack
 
-# npm
-npm install
+**Client:** Nuxt3, Vue3.
 
-# pnpm
-pnpm install
-```
 
-## Development Server
+## Installation
 
-Start the development server on http://localhost:3000
+My project uses no addition package/tool (just Nuxt and Vue) so simply clone the project and run
 
 ```bash
-npm run dev
+  git clone https://github.com/BaoAn21/test-project
+  cd test-project
+  yarn install / npm install
+  yarn dev / npm run dev
 ```
+    
+## Overview
 
-## Production
+- When first load admin page, data from local storage will be displayed (data after pressing Save).
+- Save button will  save data in JSON format to local storage, which means data will be saved even when closing browser
+- Undo button: after adding a component, user can undo to remove that component.
+- Redo button: adding back a component that have just Undo
+- Export button: save data in JSON format into a text file, user can find it under Download directory(data.txt).
+- Import button: chosing a text file(data.txt), all components in that file will be display. If text file contains wrong data, nothing happen.
+- View button: open new tab and direct to customer page, where customer can use component which are created by admin.
 
-Build the application for production:
 
-```bash
-npm run build
-```
 
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

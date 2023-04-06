@@ -275,9 +275,11 @@
           }
         })
         //TODO LOAD PAST DATA IN LOCAL STORAGE
-        const myData = JSON.parse(localStorage.getItem('element'));
-        element.value = myData._value
-        console.log('mouted');
+        if(localStorage.getItem('element')){
+          const myData = JSON.parse(localStorage.getItem('element'));
+          element.value = myData._value
+          console.log('mouted');
+        }
       })
       return{
         mouseX,

@@ -16,9 +16,12 @@ export default ({
     }
     onMounted(()=>{
       // LOADING DATA FROM LOCAL STORAGE
+
       const myData = JSON.parse(localStorage.getItem('element'));
-      element.value = myData._value
-      console.log(element.value); 
+      if(myData){
+        element.value = myData._value
+        console.log(element.value); 
+      }
     })
     return{
       element,
